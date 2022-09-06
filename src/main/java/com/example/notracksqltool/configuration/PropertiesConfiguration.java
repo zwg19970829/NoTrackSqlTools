@@ -1,32 +1,17 @@
 package com.example.notracksqltool.configuration;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
-@ConfigurationProperties(prefix = "mysql.no.track")
 public class PropertiesConfiguration {
 
-    private String prefix;
-
-    private String subfix;
+    private String template;
 
     private Boolean needRollBack;
 
-    public String getPrefix() {
-        return prefix;
+    public String getTemplate() {
+        return template;
     }
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    public String getSubfix() {
-        return subfix;
-    }
-
-    public void setSubfix(String subfix) {
-        this.subfix = subfix;
+    public void setTemplate(String template) {
+        this.template = template;
     }
 
     public Boolean getNeedRollBack() {

@@ -12,5 +12,5 @@ public interface SqlNoTrackConvert {
 
     String convertDelete(String sql, NoTrackEntity noTrackEntity);
 
-    String convertInsert(String sql, NoTrackEntity noTrackEntity);
+    String convertInsert(String delSql, String sql, NoTrackEntity noTrackEntity);
 }

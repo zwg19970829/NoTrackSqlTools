@@ -1,8 +1,8 @@
 package com.example.notracksqltool.convert;
 
-import com.example.notracksqltool.configuration.PropertiesConfiguration;
 import com.example.notracksqltool.constant.Constants;
 import com.example.notracksqltool.entity.NoTrackEntity;
+import com.example.notracksqltool.queue.AddAndDelConnectSingleQueue;
 import com.example.notracksqltool.utils.SqlParseUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
@@ -41,14 +41,15 @@ public abstract class AbstractSqlNoTrackConvert implements SqlNoTrackConvert {
     public String convert(String sql) {
         NoTrackEntity noTrackEntity = new NoTrackEntity();
         noTrackEntity.setTableName(SqlParseUtil.getTableNameByDelAndAdd(sql));
-        noTrackEntity.setNeedRollback(new PropertiesConfiguration().getNeedRollBack());
 
         if (StringUtils.startsWithIgnoreCase(sql, Constants.DELETE)) {
+            AddAndDelConnectSingleQueue.put(sql);
             return convertDelete(sql, noTrackEntity);
         }
 
         if (StringUtils.startsWithIgnoreCase(sql, Constants.INSERT)) {
-            return convertInsert(sql, noTrackEntity);
+            String delSql = AddAndDelConnectSingleQueue.get();
+            return convertInsert(delSql, sql, noTrackEntity);
         }
 
         LOGGER.error("Do not support this sql: %s", sql);
@@ -61,7 +62,7 @@ public abstract class AbstractSqlNoTrackConvert implements SqlNoTrackConvert {
     }
 
     @Override
-    public String convertInsert(String sql, NoTrackEntity noTrackEntity) {
+    public String convertInsert(String delSql, String sql, NoTrackEntity noTrackEntity) {
         return Strings.EMPTY;
     }
 }
